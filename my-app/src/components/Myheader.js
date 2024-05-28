@@ -1,5 +1,8 @@
 import { Component } from 'react';
 class Myheader extends Component {
+  shouldComponentUpdate(nextProps) {
+    return false;
+  }
   render() {
     console.log('Myheader 실행');
     return (

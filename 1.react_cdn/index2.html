@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+    <script>
+       let link = React.createElement('a',{href:'http://www.google.co.com', target:'_blank'},'google');
+
+       let mycontent = React.createElement('p',{className:'links'},link,link,link);
+       
+       ReactDOM.render(mycontent, document.getElementById('content'));
+    </script>
+</body>
+</html>

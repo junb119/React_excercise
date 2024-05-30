@@ -10,19 +10,16 @@ function Home() {
   );
 }
 let contents = [
-  { id: 1, title: 'HTML', desc: 'HTML is ...' },
-  { id: 2, title: 'css', desc: 'css is ...' },
-  { id: 3, title: 'javascript', desc: 'javascript is ...' },
+  { id: 1, title: 'HTML', desc: 'HTML is...' },
+  { id: 2, title: 'CSS', desc: 'CSS is...' },
+  { id: 3, title: 'javscript', desc: 'javscript is...' },
 ];
 function Topics() {
-  let list = [];
-  contents.forEach((item) => {
-    list.push(
-      <li key={item.id}>
-        <NavLink to={'/topics/' + item.id}>{item.title}</NavLink>
-      </li>
-    );
-  });
+  let list = contents.map((item) => (
+    <li key={item.id}>
+      <NavLink to={'/topics/' + item.id}>{item.title}</NavLink>
+    </li>
+  ));
   return (
     <div>
       <h1>Topics</h1>
@@ -35,21 +32,39 @@ function Topics() {
     </div>
   );
 }
+function Topic() {
+  let params = useParams();
+  let topic_id = params.topic_id;
+  console.log(params);
+
+  let selected_topic = {
+    title: 'Sorry',
+    desc: 'Not found',
+  };
+
+  // for (let i = 0; i < contents.length; i++) {
+  //   if (contents[i].id === Number(topic_id)) {
+  //     selected_topic = contents[i];
+  //     break;
+  //   }
+  // }
+
+  // selected_topic = contents.filter((content) => content.id === Number(topic_id))[0];
+  // selected_topic = contents.find((content) => content.id === Number(topic_id));
+  selected_topic = contents[contents.findIndex((content) => content.id === Number(topic_id))];
+  
+  return (
+    <div>
+      <h1>{selected_topic.title}</h1>
+      <p>{selected_topic.desc}</p>
+    </div>
+  );
+}
 function Contact() {
   return (
     <div>
       <h1>Contact</h1>
       <p>Contact...</p>
-    </div>
-  );
-}
-function Topic() {
-  let params = useParams();
-  console.log(params);
-  return (
-    <div>
-      <h1>Topic</h1>
-      <p>Topic...</p>
     </div>
   );
 }

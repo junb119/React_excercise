@@ -1,7 +1,11 @@
-import { click } from '@testing-library/user-event/dist/click';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { increment } from './CounterSlice';
 
+// eslint-disable-next-line
 function Button({ value, onclick, reset }) {
+  const dispatch = useDispatch();
+
   const [isClicked, setIsClicked] = useState(false);
   let className = 'button';
   if (isClicked) {
@@ -12,7 +16,7 @@ function Button({ value, onclick, reset }) {
   }
   function clickHandler() {
     setIsClicked(true);
-    onclick(value);
+    dispatch(increment(value));
   }
   return (
     <button className={className} onClick={clickHandler}>

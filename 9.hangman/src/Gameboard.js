@@ -1,6 +1,8 @@
 import LetterGrid from './Letter-grid';
 import ButtonGrid from './Button-grid';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 // function Gameboard() {
 //   return (
 //     <div>
@@ -11,25 +13,26 @@ import { useState } from 'react';
 // export default Gameboard
 
 const Gameboard = ({ secretword, maxError }) => {
-  const [guessedLetters, setGuessedLetters] = useState([]);
+  const guessedLetters = useSelector((state) => state.counter.value);
+
+  // const [guessedLetters, setGuessedLetters] = useState([]);
   const [errorCount, setErrorCount] = useState(0);
   const [reset, setReset] = useState(false);
 
   const guessedLetterHandler = (value) => {
-    let val = value.toLowerCase();
-    setGuessedLetters((prev) => [...prev, val]);
-    secretword = secretword
-      .split('')
-      .map((item) => item.toLowerCase())
-      .join('');
-
-    if (secretword.indexOf(val) === -1) {
-      setErrorCount(errorCount + 1);
-    }
-    if (reset) {
-      setReset(false);
-      setGuessedLetters([]);
-    }
+    //   let val = value.toLowerCase();
+    //   setGuessedLetters((prev) => [...prev, val]);
+    //   secretword = secretword
+    //     .split('')
+    //     .map((item) => item.toLowerCase())
+    //     .join('');
+    //   if (secretword.indexOf(val) === -1) {
+    //     setErrorCount(errorCount + 1);
+    //   }
+    //   if (reset) {
+    //     setReset(false);
+    //     setGuessedLetters([]);
+    //   }
   };
   return (
     <div>
@@ -40,7 +43,7 @@ const Gameboard = ({ secretword, maxError }) => {
         <button
           onClick={() => {
             setErrorCount(0);
-            setGuessedLetters([]);
+            // setGuessedLetters([]);
             setReset(true);
           }}
         >

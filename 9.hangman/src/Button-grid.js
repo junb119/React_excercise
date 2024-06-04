@@ -1,6 +1,6 @@
 import Button from './Button';
 
-const ButtonGrid = ({ onclick, isShown,reset }) => {
+const ButtonGrid = ({ onclick, isShown, reset }) => {
   let letters = [
     'A',
     'B',
@@ -31,7 +31,7 @@ const ButtonGrid = ({ onclick, isShown,reset }) => {
   ];
 
   // letters를 가지고 button 태그 생성
-  let buttons = letters.map((letter, index) => <Button value={letter} key={index} onclick={onclick} reset={reset}/>);
+  let buttons = letters.map((letter, index) => <Button value={letter} key={index} onclick={onclick} reset={reset} />);
   let className = 'buttons';
   if (!isShown) {
     className += ' hidden';

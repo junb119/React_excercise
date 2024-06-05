@@ -1,4 +1,5 @@
-export default function Letter({ value, isShown }) {
+// eslint-disable-next-line
+export default function ({ value, isShown }) {
   let output = '';
   if (isShown) {
     output = value;

@@ -1,22 +1,31 @@
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { increment } from './CounterSlice';
+import { addLetters } from './LetterSlice';
 
 // eslint-disable-next-line
-function Button({ value, onclick, reset }) {
+export default function ({ value, onclick, reset }) {
   const dispatch = useDispatch();
 
   const [isClicked, setIsClicked] = useState(false);
   let className = 'button';
+
   if (isClicked) {
     className += ' guessed';
   }
+
+  useEffect(() => {
+    if (reset) {
+      setIsClicked(false);
+    }
+  }, [reset]);
+
   if (reset) {
     className = 'button';
   }
   function clickHandler() {
     setIsClicked(true);
-    dispatch(increment(value));
+    dispatch(addLetters(value));
   }
   return (
     <button className={className} onClick={clickHandler}>
@@ -24,5 +33,3 @@ function Button({ value, onclick, reset }) {
     </button>
   );
 }
-
-export default Button;

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Board extends Component {
   render() {
+    let date = this.props.data.date || this.props.data.update_date;
     return (
       <tr>
         <th scope="row">
@@ -14,9 +16,12 @@ export default class Board extends Component {
           />
         </th>
         <td>{this.props.data.id}</td>
-        <td>{this.props.data.title}</td>
+
+        <td>
+          <Link to={`/view?id=${this.props.data.id}`}>{this.props.data.title}</Link>
+        </td>
         <td>{this.props.data.user_id}</td>
-        <td>{this.props.data.update_date}</td>
+        <td>{date}</td>
       </tr>
     );
   }

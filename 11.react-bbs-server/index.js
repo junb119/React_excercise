@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/list', (req, res) => {
-  const Sql = 'SELECT id,title, user_id, DATE_FORMAT(update_date, "%Y-%m-%d") AS update_date FROM board';
+  const Sql = 'SELECT id,title, user_id, DATE_FORMAT(update_date, "%Y-%m-%d") AS update_date,DATE_FORMAT(date, "%Y-%m-%d") AS date FROM board';
   db.query(Sql, function (err, result) {
     if (err) throw err;
     res.send(result);
@@ -55,6 +55,17 @@ app.post('/update', (req, res) => {
   let sql = 'UPDATE board SET title=?,content=? WHERE id=?';
 
   db.query(sql, [title, content, id], function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+app.post('/delete', (req, res) => {
+  // let title = req.body.title;
+  // let content = req.body.content;
+  const id = req.body.boardIdList;
+  console.log('d', id);
+  let sql = `DELETE FROM board WHERE id in (${id})`;
+  db.query(sql, function (err, result) {
     if (err) throw err;
     res.send(result);
   });

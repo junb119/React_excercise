@@ -12,7 +12,7 @@ export default function BoardList(props) {
   const navigate = useNavigate();
 
   const getList = () => {
-    Axios.get('http://localhost:8000/list')
+    Axios.get('http://34.22.80.155:8000/list')
       .then((res) => {
         // 성공 핸들링
         const { data } = res;
@@ -65,7 +65,7 @@ export default function BoardList(props) {
         boardIdList += `'${item}',`;
       });
 
-      Axios.post('http://localhost:8000/delete', {
+      Axios.post('http://34.22.80.155:8000/delete', {
         boardIdList: boardIdList.substring(0, boardIdList.length - 1),
       })
         .then((res) => {

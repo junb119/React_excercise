@@ -12,7 +12,7 @@ export default function Write(props) {
   const navigate = useNavigate();
 
   const write = () => {
-    Axios.post('http://localhost:8000/insert', { title: form.title, content: form.content })
+    Axios.post('http://34.22.80.155:8000/insert', { title: form.title, content: form.content })
       .then((res) => {
         // 성공 핸들링
         alert('등록 완료');
@@ -24,7 +24,7 @@ export default function Write(props) {
       });
   };
   const update = () => {
-    Axios.post('http://localhost:8000/update', {
+    Axios.post('http://34.22.80.155:8000/update', {
       id: props.boardId,
       title: form.title,
       content: form.content,
@@ -42,7 +42,7 @@ export default function Write(props) {
       });
   };
   const detail = () => {
-    Axios.get(`http://localhost:8000/detail?id=${props.boardId}`)
+    Axios.get(`http://34.22.80.155:8000/detail?id=${props.boardId}`)
       .then((res) => {
         // 성공 핸들링
         if (res.data.length > 0) {

@@ -9,7 +9,7 @@ export default function View() {
   const [form, setForm] = useState({ title: '', content: '' });
 
   const detail = () => {
-    Axios.get(`http://localhost:8000/detail?id=${id}`)
+    Axios.get(`http://34.22.80.155:8000/detail?id=${id}`)
       .then((res) => {
         // 성공 핸들링
         if (res.data.length > 0) {

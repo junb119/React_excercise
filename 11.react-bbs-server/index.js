@@ -5,13 +5,13 @@ const mysql = require('mysql');
 const cors = require('cors');
 
 var corsOptions = {
-  origin: 'http://localhost:3000', // 모두 허용 : *
+  origin: '*', // 모두 허용 : *
 };
 
 var db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '12345',
   database: 'react_bbs',
 });
 
@@ -22,7 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/list', (req, res) => {
-  const Sql = 'SELECT id,title, user_id, DATE_FORMAT(update_date, "%Y-%m-%d") AS update_date,DATE_FORMAT(date, "%Y-%m-%d") AS date FROM board';
+  const Sql =
+    'SELECT id,title, user_id, DATE_FORMAT(update_date, "%Y-%m-%d") AS update_date,DATE_FORMAT(date, "%Y-%m-%d") AS date FROM board';
   db.query(Sql, function (err, result) {
     if (err) throw err;
     res.send(result);

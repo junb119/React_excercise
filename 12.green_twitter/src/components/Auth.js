@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { authService } from '../firebase';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +14,7 @@ const Auth = () => {
   const [newAccount, setNewAccount] = useState(true);
   const [error, setError] = useState('');
   const auth = getAuth();
+
   const onChange = (e) => {
     const {
       target: { name, value },
@@ -54,7 +61,31 @@ const Auth = () => {
   console.log(email, password);
   // const toggleAccount = () => setNewAccount(prev=>!prev);
   const toggleAccount = () => setNewAccount(!newAccount);
-
+  const googleSignin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        console.log(token, user);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        setError(errorMessage, errorCode, email, credential);
+      });
+  };
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -69,6 +100,12 @@ const Auth = () => {
       <button type="button" onClick={toggleAccount}>
         {newAccount ? '로그인으로 전환' : '회원가입으로 전환'}
       </button>
+      <hr />
+      <div>
+        <button type="button" name="google" onClick={googleSignin}>
+          구글로 회원가입
+        </button>
+      </div>
     </>
   );
 };

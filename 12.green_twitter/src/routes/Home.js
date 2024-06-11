@@ -4,6 +4,7 @@ import { db } from '../firebase';
 
 const Home = () => {
   const [post, setPost] = useState('');
+  const [posts, setPosts] = useState([]);
   // const q = query(collection(db, "cities"), where("capital", "==", true));
 
   const onChange = (e) => {
@@ -29,11 +30,15 @@ const Home = () => {
   const getPosts = async () => {
     const querySnapshot = await getDocs(collection(db, 'posts'));
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data());
-      console.log(doc);
+      // console.log(doc.id, ' => ', doc.data());
+      const postObj = {
+        ...doc.data(),
+        id: doc.id,
+      };
+      setPosts((prev) => [...prev, postObj]);
     });
   };
+  console.log(posts);
   useEffect(() => {
     getPosts();
   }, []);
@@ -43,6 +48,11 @@ const Home = () => {
         <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} />
         <input type="submit" value="App Post" />
       </form>
+      <ul>
+        {posts.map((list) => (
+          <li key={list.id}>{list.post}</li>
+        ))}
+      </ul>
     </div>
   );
 };

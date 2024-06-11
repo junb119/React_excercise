@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const Home = () => {
   const [post, setPost] = useState('');
+  // const q = query(collection(db, "cities"), where("capital", "==", true));
+
   const onChange = (e) => {
     // let val = e.target.value
     const {
@@ -15,7 +17,7 @@ const Home = () => {
     e.preventDefault();
     try {
       const docRef = await addDoc(collection(db, 'posts'), {
-        title: 'Lovelace',
+        post,
         date: serverTimestamp(),
       });
       setPost('');
@@ -24,6 +26,17 @@ const Home = () => {
       console.error('Error adding document: ', e);
     }
   };
+  const getPosts = async () => {
+    const querySnapshot = await getDocs(collection(db, 'posts'));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, ' => ', doc.data());
+      console.log(doc);
+    });
+  };
+  useEffect(() => {
+    getPosts();
+  }, []);
   return (
     <div>
       <form action="" onSubmit={onSubmit}>

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { collection, addDoc, query, onSnapshot, orderBy, getDocs, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, onSnapshot, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 import Post from '../components/Post';
 
 const Home = ({ userObj }) => {
   const [post, setPost] = useState('');
   const [posts, setPosts] = useState([]);
   const [attachment, setAttachment] = useState();
+  // const [attachmentUrl, setAttachmentUrl] = useState('');
+  let attachmentUrl = '';
+  const storage = getStorage();
+
   // const q = query(collection(db, "cities"), where("capital", "==", true));
 
   const onChange = (e) => {
@@ -18,16 +24,32 @@ const Home = ({ userObj }) => {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const docRef = await addDoc(collection(db, 'posts'), {
+    const inputFile = document.querySelector('#file');
+    const fileRef = ref(storage, `${userObj}/${uuidv4()}.jpg`);
+    // Data URL string
+    const addPost = async () => {
+      await addDoc(collection(db, 'posts'), {
         content: post,
         date: serverTimestamp(),
         uid: userObj,
+        attachmentUrl,
       });
       setPost('');
-      console.log('Document written with ID: ', docRef.id);
+      setAttachment('');
+      inputFile.value = '';
+    };
+    try {
+      if (inputFile.value) {
+        uploadString(fileRef, attachment, 'data_url').then(async (snapshot) => {
+          const url = await getDownloadURL(fileRef);
+          attachmentUrl = url;
+          addPost();
+        });
+      } else {
+        addPost();
+      }
     } catch (e) {
-      console.error('Error adding document: ', e);
+      alert('글 등록 실패');
     }
   };
   // const getPosts = async () => {
@@ -80,15 +102,29 @@ const Home = ({ userObj }) => {
     //   reader.readAsDataURL(file);
     // }
   };
-
+  const onClearFile = () => {
+    setAttachment(null);
+    document.querySelector('#file').value = '';
+  };
   return (
     <div>
       <form action="" onSubmit={onSubmit}>
-        <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        {attachment && <img src={attachment} width="50" alt="" />}
-        <input type="submit" value="App Post" />
+        <input type="text" value={post} placeholder="Write your twitt" onChange={onChange} require="true" />
+        <input type="file" accept="image/*" onChange={onFileChange} id="file" />
+        {attachment && (
+          <>
+            <img src={attachment} width="50" alt="" />
+            <button type="button" onClick={onClearFile}>
+              파일 업로드 취소
+            </button>
+          </>
+        )}
+
+        <p>
+          <input type="submit" value="App Post" />
+        </p>
       </form>
+      <hr />
       <ul>
         {posts.map((list) => (
           <Post key={list.id} postObj={list} isOwener={list.uid === userObj} />
